@@ -46,16 +46,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PresentationLayer\Users.cs">
+    <Compile Include="DataLayer\dUsers.cs" />
+    <Compile Include="DataLayer\MasterConnection.cs" />
+    <Compile Include="LogicLayer\lUsers.cs" />
+    <Compile Include="PresentationLayer\User.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PresentationLayer\Users.Designer.cs">
-      <DependentUpon>Users.cs</DependentUpon>
+    <Compile Include="PresentationLayer\User.Designer.cs">
+      <DependentUpon>User.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="PresentationLayer\Users.resx">
-      <DependentUpon>Users.cs</DependentUpon>
+    <EmbeddedResource Include="PresentationLayer\User.resx">
+      <DependentUpon>User.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -65,6 +68,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -80,8 +84,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataLayer\" />
-    <Folder Include="LogicLayer\" />
+    <None Include="icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="lupa.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
