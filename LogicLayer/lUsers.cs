@@ -19,32 +19,32 @@ namespace UsersAdmin.LogicLayer
         #region Getter and Setters
         public int UserId
         {
-            get { return UserId; }
-            set { UserId = value; }
+            get { return userId; }
+            set { userId = Convert.ToInt32(value); }
         }
 
         public string UserName
         {
-            get { return UserName; }
-            set { UserName = value; }
+            get { return userName; }
+            set { userName = value; }
         }
 
         public string Password
         {
-            get { return Password; }
-            set { Password = value; }
+            get { return password; }
+            set { password = value; }
         }
 
         public byte[] Icon
         {
-            get { return Icon; }
-            set { Icon = value; }
+            get { return icon; }
+            set { icon = value; }
         }
 
         public string Status
         {
-            get { return Status; }
-            set { Status = value; }
+            get { return status; }
+            set { status = value; }
         }
         #endregion
 

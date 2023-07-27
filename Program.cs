@@ -16,7 +16,7 @@ namespace UsersAdmin
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new PresentationLayer.UsersForm());
+            Application.Run(new PresentationLayer.UserForm());
         }
     }
 }
