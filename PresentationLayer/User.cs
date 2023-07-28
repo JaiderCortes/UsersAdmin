@@ -21,6 +21,8 @@ namespace UsersAdmin.PresentationLayer
             InitializeComponent();
         }
 
+        int UserId;
+
         private void btnInsert_Click(object sender, EventArgs e)
         {
             try
@@ -29,6 +31,7 @@ namespace UsersAdmin.PresentationLayer
                 Thread.Sleep(1000);
                 Cursor = Cursors.Default;
                 usersPanel.Visible = true;
+                usersPanel.Dock = DockStyle.Fill;
                 btnSave.Visible = true;
                 btnSaveChg.Visible = false;
                 txtUsername.Clear();
@@ -72,6 +75,7 @@ namespace UsersAdmin.PresentationLayer
                     if(txtPassword.Text != "")
                     {
                         InsertUser();
+                        ShowUsers();
                     }
                     else
                     {
@@ -82,6 +86,26 @@ namespace UsersAdmin.PresentationLayer
                 {
                     MessageBox.Show($"Please fill the Username field", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void UserForm_Load(object sender, EventArgs e)
+        {
+            ShowUsers();
+        }
+
+        private void ShowUsers()
+        {
+            try
+            {
+                DataTable dt = new DataTable();
+                dUsers du = new dUsers();
+                dt = du.ShowUsers();
+                usersList.DataSource = dt;
             }
             catch (Exception ex)
             {
@@ -103,8 +127,154 @@ namespace UsersAdmin.PresentationLayer
                 lu.Status = "Active";
                 if (du.InsertUser(lu))
                 {
-                    MessageBox.Show($"User created successfully", "Confirmation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show($"User created successfully", "Insert confirmation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    usersPanel.Visible = false;
+                    usersPanel.Dock = DockStyle.None;
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void UpdateUser()
+        {
+            try
+            {
+                lUsers lu = new lUsers();
+                dUsers du = new dUsers();
+                lu.UserId = UserId;
+                lu.UserName = txtUsername.Text;
+                lu.Password = txtPassword.Text;
+                MemoryStream ms = new MemoryStream();
+                icon.Image.Save(ms, icon.Image.RawFormat);
+                lu.Icon = ms.GetBuffer();
+                lu.Status = "Active";
+                if (du.UpdateUser(lu))
+                {
+                    MessageBox.Show($"User updated successfully", "Update confirmation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    usersPanel.Visible = false;
+                    usersPanel.Dock = DockStyle.None;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void DeleteUser()
+        {
+            try
+            {
+                lUsers lu = new lUsers();
+                dUsers du = new dUsers();
+                lu.UserId = UserId;
+                if (du.DeleteUser(lu))
+                {
+                    MessageBox.Show($"User deleted successfully", "Delete confirmation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    usersPanel.Visible = false;
+                    usersPanel.Dock = DockStyle.None;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void usersList_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                UserId = int.Parse(usersList.SelectedCells[2].Value.ToString());
+                if (e.ColumnIndex == this.usersList.Columns["Delete"].Index)
+                {
+                    Cursor = Cursors.WaitCursor;
+                    Thread.Sleep(1000);
+                    Cursor = Cursors.Default;
+                    DialogResult result;
+                    result = MessageBox.Show("Are you sure you want to delete this user?", "Delete user confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                    if(result == DialogResult.OK)
+                    {
+                        DeleteUser();
+                        ShowUsers();
+                    }
+                }
+                if (e.ColumnIndex == this.usersList.Columns["Update"].Index)
+                {
+                    Cursor = Cursors.WaitCursor;
+                    Thread.Sleep(1000);
+                    Cursor = Cursors.Default;
+                    txtUsername.Text = usersList.SelectedCells[3].Value.ToString();
+                    txtPassword.Text = usersList.SelectedCells[4].Value.ToString();
+                    icon.BackgroundImage = null;
+                    byte[] img = (Byte[])usersList.SelectedCells[5].Value;
+                    MemoryStream ms = new MemoryStream(img);
+                    icon.Image = Image.FromStream(ms);
+
+                    usersPanel.Visible = true;
+                    usersPanel.Dock = DockStyle.Fill;
+                    btnSave.Visible = false;
+                    btnSaveChg.Visible = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+                Thread.Sleep(1000);
+                Cursor = Cursors.Default;
+                usersPanel.Visible = false;
+                usersPanel.Dock = DockStyle.None;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnSaveChg_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                UpdateUser();
+                ShowUsers();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                SearchUser();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SearchUser()
+        {
+            try
+            {
+                DataTable dt;
+                dUsers du = new dUsers();
+                dt = du.SearchUsers(txtSearch.Text);
+                usersList.DataSource = dt;
             }
             catch (Exception ex)
             {

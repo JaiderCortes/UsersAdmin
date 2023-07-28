@@ -89,5 +89,11 @@
   <ItemGroup>
     <None Include="lupa.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="pencil.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="trash.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
